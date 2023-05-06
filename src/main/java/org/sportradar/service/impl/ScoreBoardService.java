@@ -1,5 +1,6 @@
 package org.sportradar.service.impl;
 
+import org.sportradar.model.GameTypeEnum;
 import org.sportradar.model.IGame;
 import org.sportradar.model.ITeam;
 import org.sportradar.service.IGameService;
@@ -30,8 +31,8 @@ public class ScoreBoardService implements IScoreBoardService {
      * {@inheritDoc}
      */
     @Override
-    public long createNewGame(ITeam homeTeam, ITeam awayTeam) {
-        return gameService.createGame(homeTeam, awayTeam);
+    public long createNewFootballGame(ITeam homeTeam, ITeam awayTeam) {
+        return gameService.createGame(homeTeam, awayTeam, GameTypeEnum.FOOTBALL.toString());
     }
 
     /**
@@ -39,7 +40,7 @@ public class ScoreBoardService implements IScoreBoardService {
      */
     @Override
     public long updateGame(long gameId, Integer homeTeamScore, Integer awayTeamScore) {
-        return 0;
+        return gameService.updateGame(gameId, homeTeamScore, awayTeamScore);
     }
 
     /**
@@ -47,6 +48,6 @@ public class ScoreBoardService implements IScoreBoardService {
      */
     @Override
     public long finishGame(long gameId) {
-        return 0;
+        return gameService.finishGame(gameId);
     }
 }

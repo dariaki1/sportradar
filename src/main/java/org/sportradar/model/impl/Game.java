@@ -9,7 +9,7 @@ import org.sportradar.model.GameTypeEnum;
 /**
  * This class represents games of specific {@link GameTypeEnum#FOOTBALL} type
  */
-public class FootballGame implements IGame {
+public class Game implements IGame {
 
     private final long id;
     private String description;
@@ -28,7 +28,7 @@ public class FootballGame implements IGame {
 //        type = GameTypeEnum.FOOTBALL;
 //    }
 
-    public FootballGame(Builder builder) {
+    public Game(Builder builder) {
         this.id = builder.id;
         this.type = builder.type;
         this.status = builder.status;
@@ -52,6 +52,10 @@ public class FootballGame implements IGame {
     @Override
     public GameStatusEnum getStatus() {
         return status;
+    }
+
+    public void setStatus(GameStatusEnum status) {
+        this.status = status;
     }
 
     public String getDescription() {
@@ -108,8 +112,8 @@ public class FootballGame implements IGame {
                 '}';
     }
 
-    public static Builder newBuilder(long id) {
-        return new Builder(id);
+    public static Builder newBuilder(long id, GameTypeEnum type) {
+        return new Builder(id, type);
     }
 
     public static class Builder {
@@ -126,21 +130,11 @@ public class FootballGame implements IGame {
         private Integer homeTeamScore; //add validation
         private Integer awayTeamScore;// add validation
 
-        private Builder(long id) {
+        private Builder(long id, GameTypeEnum type) {
             this.id = id;
-            this.type = GameTypeEnum.FOOTBALL;
+            this.type = type;
             this.status = GameStatusEnum.CREATED;
         }
-
-//        public Builder id(long id) {
-//            this.id = id;
-//            return this;
-//        }
-//
-//        public Builder type(GameTypeEnum type) {
-//            this.type = type;
-//            return this;
-//        }
 
         public Builder description(String description) {
             this.description = description;
@@ -167,8 +161,8 @@ public class FootballGame implements IGame {
             return this;
         }
 
-        public FootballGame build() {
-            return new FootballGame(this);
+        public Game build() {
+            return new Game(this);
         }
     }
 

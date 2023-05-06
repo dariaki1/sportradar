@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.sportradar.exception.IncorrectGameParameterException;
 import org.sportradar.model.GameStatusEnum;
 import org.sportradar.model.GameTypeEnum;
-import org.sportradar.model.impl.FootballGame;
+import org.sportradar.model.impl.Game;
 import org.sportradar.model.impl.Team;
 import org.sportradar.repository.impl.GameRepository;
 
@@ -37,10 +37,10 @@ public class ScoreBoardServiceTest {
         Team awayTeam = Team.newBuilder(TEAM_ID_2).build();
 
         //when
-        long newGameId = boardService.createNewGame(homeTeam, awayTeam);
+        long newGameId = boardService.createNewFootballGame(homeTeam, awayTeam);
 
         //then
-        FootballGame resultGame = (FootballGame) gameRepository.getGameById(newGameId).get();
+        Game resultGame = (Game) gameRepository.getGameById(newGameId).get();
         assertEquals(newGameId, resultGame.getId());
         assertEquals(GameStatusEnum.CREATED, resultGame.getStatus());
         assertEquals(GameTypeEnum.FOOTBALL, resultGame.getType());
@@ -57,7 +57,7 @@ public class ScoreBoardServiceTest {
 
         //when
         Exception exception = assertThrows(IncorrectGameParameterException.class, () -> {
-            boardService.createNewGame(null, awayTeam);
+            boardService.createNewFootballGame(null, awayTeam);
         });
 
         //then
@@ -74,7 +74,7 @@ public class ScoreBoardServiceTest {
 
         //when
         Exception exception = assertThrows(IncorrectGameParameterException.class, () -> {
-            boardService.createNewGame(homeTeam, null);
+            boardService.createNewFootballGame(homeTeam, null);
         });
 
         //then
@@ -82,5 +82,46 @@ public class ScoreBoardServiceTest {
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void shouldUpdateScore(){
+        //before
+        long newGameId = createNewGame(TEAM_ID_1, TEAM_ID_2);
+
+        //when
+        long updatedGameId = boardService.updateGame(newGameId, 1, 0);
+
+        //then
+        Game resultGame = (Game) gameRepository.getGameById(newGameId).get();
+        assertEquals(newGameId, resultGame.getId());
+        assertEquals(GameStatusEnum.STARTED, resultGame.getStatus());
+        assertEquals(GameTypeEnum.FOOTBALL, resultGame.getType());
+        assertEquals(TEAM_ID_1, resultGame.getHomeTeam().getId());
+        assertEquals(TEAM_ID_2, resultGame.getAwayTeam().getId());
+        assertEquals((Integer)1, resultGame.getHomeTeamScore());
+        assertEquals((Integer)0, resultGame.getAwayTeamScore());
+    }
+
+    @Test
+    public void shouldFailToUpdateScoreIfGameNotExists(){
+        //when
+        Exception exception = assertThrows(IncorrectGameParameterException.class, () -> {
+            boardService.updateGame(3L, 1, 0);
+        });
+
+        //then
+        String expectedMessage = "Game with id 3 not found";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    private long createNewGame(long homeTeamId, long awayTeamId){
+        //before
+        Team homeTeam = Team.newBuilder(homeTeamId).build();
+        Team awayTeam = Team.newBuilder(awayTeamId).build();
+
+        return boardService.createNewFootballGame(homeTeam, awayTeam);
     }
 }

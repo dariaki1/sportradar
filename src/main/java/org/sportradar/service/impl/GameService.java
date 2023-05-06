@@ -1,24 +1,27 @@
 package org.sportradar.service.impl;
 
 import org.sportradar.exception.IncorrectGameParameterException;
+import org.sportradar.model.GameStatusEnum;
+import org.sportradar.model.GameTypeEnum;
 import org.sportradar.model.IGame;
 import org.sportradar.model.ITeam;
-import org.sportradar.model.impl.FootballGame;
-import org.sportradar.repository.impl.GameRepository;
+import org.sportradar.model.impl.Game;
+import org.sportradar.repository.IGameRepository;
 import org.sportradar.service.IGameService;
 
+import java.util.Optional;
 import java.util.Random;
 
 public class GameService implements IGameService {
 
-    private GameRepository gameRepository;
+    private IGameRepository gameRepository;
 
-    public GameService(GameRepository gameRepository) {
+    public GameService(IGameRepository gameRepository) {
         this.gameRepository = gameRepository;
     }
 
     @Override
-    public long createGame(ITeam homeTeam, ITeam awayTeam) {
+    public long createGame(ITeam homeTeam, ITeam awayTeam, String gameType) {
         if (homeTeam == null) {
             throw new IncorrectGameParameterException("home team is null");
         }
@@ -26,7 +29,7 @@ public class GameService implements IGameService {
             throw new IncorrectGameParameterException("away team is null");
         }
 
-        IGame newGame = FootballGame.newBuilder(new Random().nextLong())
+        IGame newGame = Game.newBuilder(new Random().nextLong(), GameTypeEnum.valueOf(gameType))
                 .homeTeam(homeTeam)
                 .awayTeam(awayTeam)
                 .homeTeamScore(0)
@@ -34,4 +37,24 @@ public class GameService implements IGameService {
                 .build();
         return gameRepository.saveOrUpdateGame(newGame);
     }
+
+    @Override
+    public long updateGame(long gameId, Integer homeTeamScore, Integer awayTeamScore) {
+        Optional<IGame> game = gameRepository.getGameById(gameId);
+
+        return game.map(foundGame -> {
+                    foundGame.setAwayTeamScore(awayTeamScore);
+                    foundGame.setHomeTeamScore(homeTeamScore);
+                    foundGame.setStatus(GameStatusEnum.STARTED);
+                    return gameRepository.saveOrUpdateGame(foundGame);
+                })
+                .orElseThrow(() -> new IncorrectGameParameterException(String.format("Game with id %d not found", gameId)));
+    }
+
+    @Override
+    public long finishGame(long gameId) {
+        return 0;
+    }
+
+
 }

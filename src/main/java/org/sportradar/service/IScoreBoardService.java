@@ -24,7 +24,7 @@ public interface IScoreBoardService {
      * @param awayTeam
      * @return id of created game
      */
-    long createNewGame(ITeam homeTeam, ITeam awayTeam);
+    long createNewFootballGame(ITeam homeTeam, ITeam awayTeam);
 
     /**
      * Updates existing game score

@@ -25,4 +25,19 @@ public interface IGame {
      */
     GameStatusEnum getStatus();
 
+    public ITeam getHomeTeam();
+
+
+    public ITeam getAwayTeam();
+
+    public Integer getHomeTeamScore();
+
+    public void setHomeTeamScore(Integer homeTeamScore);
+
+    public Integer getAwayTeamScore();
+
+    public void setAwayTeamScore(Integer awayTeamScore) ;
+
+    public void setStatus(GameStatusEnum status);
+
 }
