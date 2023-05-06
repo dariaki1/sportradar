@@ -24,7 +24,7 @@ public class ScoreBoardService implements IScoreBoardService {
      */
     @Override
     public List<IGame> getGamesInProgressSummary() {
-        return null;
+        return gameService.getGamesInProgressSummary();
     }
 
     /**

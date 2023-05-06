@@ -1,9 +1,11 @@
 package org.sportradar.model.impl;
 
 import org.sportradar.model.GameStatusEnum;
+import org.sportradar.model.GameTypeEnum;
 import org.sportradar.model.IGame;
 import org.sportradar.model.ITeam;
-import org.sportradar.model.GameTypeEnum;
+
+import java.time.ZonedDateTime;
 
 
 /**
@@ -15,6 +17,8 @@ public class Game implements IGame {
     private String description;
     private GameTypeEnum type;
 
+    private ZonedDateTime startTime;
+
     private GameStatusEnum status;
 
     private ITeam homeTeam;
@@ -22,11 +26,6 @@ public class Game implements IGame {
     private ITeam awayTeam;
     private Integer homeTeamScore; //add validation
     private Integer awayTeamScore;// add validation
-
-//    public FootballGame(long id) {
-//        this.id = id;
-//        type = GameTypeEnum.FOOTBALL;
-//    }
 
     public Game(Builder builder) {
         this.id = builder.id;
@@ -37,6 +36,7 @@ public class Game implements IGame {
         this.homeTeam = builder.homeTeam;
         this.awayTeamScore = builder.awayTeamScore;
         this.homeTeamScore = builder.homeTeamScore;
+        this.startTime = builder.startTime;
     }
 
     @Override
@@ -98,18 +98,12 @@ public class Game implements IGame {
         this.awayTeamScore = awayTeamScore;
     }
 
-    @Override
-    public String toString() {
-        return "FootballGame{" +
-                "id=" + id +
-                ", description='" + description + '\'' +
-                ", type=" + type +
-                ", status=" + status +
-                ", homeTeam=" + homeTeam +
-                ", awayTeam=" + awayTeam +
-                ", homeTeamScore=" + homeTeamScore +
-                ", awayTeamScore=" + awayTeamScore +
-                '}';
+    public ZonedDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(ZonedDateTime startTime) {
+        this.startTime = startTime;
     }
 
     public static Builder newBuilder(long id, GameTypeEnum type) {
@@ -123,6 +117,9 @@ public class Game implements IGame {
         private GameTypeEnum type;
 
         private GameStatusEnum status;
+
+        private ZonedDateTime startTime;
+
 
         private ITeam homeTeam;
 
@@ -158,6 +155,11 @@ public class Game implements IGame {
 
         public Builder awayTeamScore(Integer score) {
             this.awayTeamScore = score;
+            return this;
+        }
+
+        public Builder startTime(ZonedDateTime time) {
+            this.startTime = time;
             return this;
         }
 

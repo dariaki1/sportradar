@@ -9,8 +9,12 @@ import org.sportradar.model.impl.Game;
 import org.sportradar.repository.IGameRepository;
 import org.sportradar.service.IGameService;
 
+import java.time.ZonedDateTime;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class GameService implements IGameService {
 
@@ -45,6 +49,7 @@ public class GameService implements IGameService {
         return game.map(foundGame -> {
                     foundGame.setAwayTeamScore(awayTeamScore);
                     foundGame.setHomeTeamScore(homeTeamScore);
+                    foundGame.setStartTime(ZonedDateTime.now());
                     foundGame.setStatus(GameStatusEnum.STARTED);
                     return gameRepository.saveOrUpdateGame(foundGame);
                 })
@@ -53,8 +58,27 @@ public class GameService implements IGameService {
 
     @Override
     public long finishGame(long gameId) {
-        return 0;
+        Optional<IGame> game = gameRepository.getGameById(gameId);
+
+        return game.map(foundGame -> {
+                    foundGame.setStatus(GameStatusEnum.FINISHED);
+                    return gameRepository.saveOrUpdateGame(foundGame);
+                })
+                .orElseThrow(() -> new IncorrectGameParameterException(String.format("Game with id %d not found", gameId)));
     }
 
+    @Override
+    public List<IGame> getGamesInProgressSummary(){
+        List<IGame> gamesInProgress = gameRepository.getAllStartedGames();
 
+        Comparator<IGame> compareByStartTimeAndScore = Comparator
+                .comparing((IGame iGame) -> iGame.getHomeTeamScore()+iGame.getAwayTeamScore())
+                .thenComparing(IGame::getStartTime);
+
+        List<IGame> gamesSorted = gamesInProgress.stream()
+                .sorted(compareByStartTimeAndScore)
+                .collect(Collectors.toList());
+
+        return gamesSorted;
+    }
 }

@@ -1,13 +1,20 @@
 package org.sportradar.service.impl;
 
+import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.sportradar.exception.IncorrectGameParameterException;
 import org.sportradar.model.GameStatusEnum;
 import org.sportradar.model.GameTypeEnum;
+import org.sportradar.model.IGame;
 import org.sportradar.model.impl.Game;
 import org.sportradar.model.impl.Team;
 import org.sportradar.repository.impl.GameRepository;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 
@@ -96,6 +103,7 @@ public class ScoreBoardServiceTest {
         Game resultGame = (Game) gameRepository.getGameById(newGameId).get();
         assertEquals(newGameId, resultGame.getId());
         assertEquals(GameStatusEnum.STARTED, resultGame.getStatus());
+        assertNotNull(resultGame.getStartTime());
         assertEquals(GameTypeEnum.FOOTBALL, resultGame.getType());
         assertEquals(TEAM_ID_1, resultGame.getHomeTeam().getId());
         assertEquals(TEAM_ID_2, resultGame.getAwayTeam().getId());
@@ -117,11 +125,97 @@ public class ScoreBoardServiceTest {
         assertTrue(actualMessage.contains(expectedMessage));
     }
 
+    @Test
+    public void shouldFinishStartedGame() {
+        //before
+        long newGameId = createNewGame(TEAM_ID_1, TEAM_ID_2);
+        int homeTeamScore = 6;
+        int awayTeamScore = 12;
+        boardService.updateGame(newGameId, homeTeamScore, awayTeamScore);
+
+        //when
+        boardService.finishGame(newGameId);
+
+        //then
+        Game resultGame = (Game) gameRepository.getGameById(newGameId).get();
+        assertEquals(newGameId, resultGame.getId());
+        assertEquals(GameStatusEnum.FINISHED, resultGame.getStatus());
+        assertEquals(GameTypeEnum.FOOTBALL, resultGame.getType());
+        assertEquals(TEAM_ID_1, resultGame.getHomeTeam().getId());
+        assertEquals(TEAM_ID_2, resultGame.getAwayTeam().getId());
+        assertEquals((Integer)homeTeamScore, resultGame.getHomeTeamScore());
+        assertEquals((Integer)awayTeamScore, resultGame.getAwayTeamScore());
+    }
+
+
+    @Test
+    public void shouldFailToFinishGameIfGameNotFound() {
+        //when
+        Exception exception = assertThrows(IncorrectGameParameterException.class, () -> {
+            boardService.finishGame(3L);
+        });
+
+        //then
+        String expectedMessage = "Game with id 3 not found";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void shouldReturnStartedGamesOrdered() throws InterruptedException {
+        //before
+        long teamId3 = 3L;
+        long teamId4 = 4l;
+        long teamId5 = 5L;
+        long teamId6 = 6L;
+        long teamId7 = 7l;
+        long teamId8 = 8L;
+        long game1 = createNewGame(TEAM_ID_1, TEAM_ID_2);
+        long game2 = createNewGame(teamId3, teamId4);
+        long game3 = createNewGame(teamId5, teamId6);
+        long game4 = createNewGame(teamId7, teamId8);
+
+        boardService.updateGame(game1, 0, 5);
+        TimeUnit.SECONDS.sleep(1);
+        boardService.updateGame(game2, 6, 6);
+        TimeUnit.SECONDS.sleep(1);
+        boardService.updateGame(game3, 10, 2);
+        TimeUnit.SECONDS.sleep(1);
+        boardService.updateGame(game4, 15, 10);
+
+        boardService.finishGame(game4);
+
+        final List<IGame> expectedGamesOrdered = new ArrayList<>(Arrays.asList(
+                gameRepository.getGameById(game2).get(),
+                gameRepository.getGameById(game3).get(),
+                gameRepository.getGameById(game1).get()));
+
+        //when
+        List<IGame> result = boardService.getGamesInProgressSummary();
+
+        //then
+        assertEquals(expectedGamesOrdered, result);
+        //assertTrue(CollectionUtils.isEqualCollection(result, expectedGamesOrdered));
+
+
+
+
+
+    }
+
+
+
     private long createNewGame(long homeTeamId, long awayTeamId){
         //before
         Team homeTeam = Team.newBuilder(homeTeamId).build();
         Team awayTeam = Team.newBuilder(awayTeamId).build();
 
         return boardService.createNewFootballGame(homeTeam, awayTeam);
+    }
+
+    @After
+    public void after(){
+        gameRepository.flush();
     }
 }

@@ -1,11 +1,13 @@
 package org.sportradar.repository.impl;
 
+import org.sportradar.model.GameStatusEnum;
 import org.sportradar.model.IGame;
 import org.sportradar.repository.IGameRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -28,7 +30,7 @@ public class GameRepository implements IGameRepository {
                 .filter(i -> game.getId() == (gameDatabase.get(i).getId()))
                 .findFirst().orElse(-1);
 
-        if (indexOpt > 0) {
+        if (indexOpt >= 0) {
             gameDatabase.set(indexOpt, game);
         } else {
             gameDatabase.add(game);
@@ -36,4 +38,18 @@ public class GameRepository implements IGameRepository {
 
         return game.getId();
     }
+
+    @Override
+    public List<IGame> getAllStartedGames() {
+        return gameDatabase.stream()
+                .filter(game -> game.getStatus() == GameStatusEnum.STARTED)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void flush() {
+        gameDatabase.clear();
+    }
+
+
 }

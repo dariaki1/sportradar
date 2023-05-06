@@ -1,5 +1,7 @@
 package org.sportradar.model;
 
+import java.time.ZonedDateTime;
+
 /**
  * Initial entity to represent games
  */
@@ -39,5 +41,9 @@ public interface IGame {
     public void setAwayTeamScore(Integer awayTeamScore) ;
 
     public void setStatus(GameStatusEnum status);
+
+    public ZonedDateTime getStartTime() ;
+
+    public void setStartTime(ZonedDateTime startTime);
 
 }
