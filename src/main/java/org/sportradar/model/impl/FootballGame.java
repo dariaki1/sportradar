@@ -1,5 +1,6 @@
 package org.sportradar.model.impl;
 
+import org.sportradar.model.GameStatusEnum;
 import org.sportradar.model.IGame;
 import org.sportradar.model.ITeam;
 import org.sportradar.model.GameTypeEnum;
@@ -13,6 +14,8 @@ public class FootballGame implements IGame {
     private final long id;
     private String description;
     private GameTypeEnum type;
+
+    private GameStatusEnum status;
 
     private ITeam homeTeam;
 
@@ -28,6 +31,7 @@ public class FootballGame implements IGame {
     public FootballGame(Builder builder) {
         this.id = builder.id;
         this.type = builder.type;
+        this.status = builder.status;
         this.description = builder.description;
         this.awayTeam = builder.awayTeam;
         this.homeTeam = builder.homeTeam;
@@ -43,6 +47,11 @@ public class FootballGame implements IGame {
     @Override
     public GameTypeEnum getType() {
         return type;
+    }
+
+    @Override
+    public GameStatusEnum getStatus() {
+        return status;
     }
 
     public String getDescription() {
@@ -91,6 +100,7 @@ public class FootballGame implements IGame {
                 "id=" + id +
                 ", description='" + description + '\'' +
                 ", type=" + type +
+                ", status=" + status +
                 ", homeTeam=" + homeTeam +
                 ", awayTeam=" + awayTeam +
                 ", homeTeamScore=" + homeTeamScore +
@@ -108,6 +118,8 @@ public class FootballGame implements IGame {
         private String description;
         private GameTypeEnum type;
 
+        private GameStatusEnum status;
+
         private ITeam homeTeam;
 
         private ITeam awayTeam;
@@ -117,6 +129,7 @@ public class FootballGame implements IGame {
         private Builder(long id) {
             this.id = id;
             this.type = GameTypeEnum.FOOTBALL;
+            this.status = GameStatusEnum.CREATED;
         }
 
 //        public Builder id(long id) {
@@ -149,8 +162,8 @@ public class FootballGame implements IGame {
             return this;
         }
 
-        public Builder awayTeamScore(Integer scope) {
-            this.awayTeamScore = scope;
+        public Builder awayTeamScore(Integer score) {
+            this.awayTeamScore = score;
             return this;
         }
 

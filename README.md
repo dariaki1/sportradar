@@ -3,6 +3,7 @@
 ## Getting Started
 Live Football World Cup Scoreboard library helps you to easily access all the ongoing matches and their
 scores.
+In scope of this library "game" and "match" are interchangeable terms for a contest between two sides.
 
 ## Installation
 Maven tool is used for building.
