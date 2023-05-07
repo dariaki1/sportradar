@@ -23,7 +23,7 @@ public class TeamValidatorTest {
         });
 
         //then
-        String expectedMessage = "Error creating team with id 1 :Team country length should be >0 and <=100 characters";
+        String expectedMessage = "Error creating team with id 1 :Team country length should be >0 and <100 characters";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
@@ -39,7 +39,7 @@ public class TeamValidatorTest {
         });
 
         //then
-        String expectedMessage = "Error creating team with id 1 :Team country length should be >0 and <=100 characters";
+        String expectedMessage = "Error creating team with id 1 :Team country length should be >0 and <100 characters";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));

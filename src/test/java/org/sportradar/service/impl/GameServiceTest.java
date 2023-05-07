@@ -9,7 +9,9 @@ import org.sportradar.model.IGame;
 import org.sportradar.model.impl.Game;
 import org.sportradar.model.impl.Team;
 import org.sportradar.repository.impl.GameRepository;
+import org.sportradar.util.IGameValidator;
 import org.sportradar.util.ITeamValidator;
+import org.sportradar.util.impl.GameValidator;
 import org.sportradar.util.impl.TeamValidator;
 
 import java.time.ZonedDateTime;
@@ -31,12 +33,14 @@ public class GameServiceTest {
     private GameService gameService;
     private GameRepository gameRepository;
     private ITeamValidator teamValidator = new TeamValidator();
+    private IGameValidator gameValidator = new GameValidator();
 
     @Before
     public void before() {
         gameRepository = spy(new GameRepository());
         gameService = new GameService(gameRepository);
         gameService.setTeamValidator(teamValidator);
+        gameService.setGameValidator(gameValidator);
     }
 
     @Test

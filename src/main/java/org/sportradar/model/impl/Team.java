@@ -4,13 +4,13 @@ import org.sportradar.model.ITeam;
 
 
 /**
- * This class represents team entity
+ * This class represents default team entity
  */
 public class Team implements ITeam {
 
     private final long id;
-    private String title; //TODO add validation
-    private String country; //TODO add validation
+    private String title;
+    private String country;
 
     public Team(long id) {
         this.id = id;
