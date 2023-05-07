@@ -6,6 +6,7 @@ import org.sportradar.model.ITeam;
 import org.sportradar.service.IGameService;
 import org.sportradar.service.IScoreBoardService;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -49,6 +50,11 @@ public class ScoreBoardService implements IScoreBoardService {
     @Override
     public long updateGame(long gameId, Integer homeTeamScore, Integer awayTeamScore) {
         return gameService.updateGame(gameId, homeTeamScore, awayTeamScore);
+    }
+
+    @Override
+    public long updateGame(long gameId, Integer homeTeamScore, Integer awayTeamScore, ZonedDateTime updateTime) {
+        return gameService.updateGame(gameId, homeTeamScore, awayTeamScore, updateTime);
     }
 
     /**

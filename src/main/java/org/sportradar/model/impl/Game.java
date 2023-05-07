@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 
 
 /**
- * This class represents games of specific {@link GameTypeEnum#FOOTBALL} type
+ * This class represents default game implementation
  */
 public class Game implements IGame {
 

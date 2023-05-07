@@ -45,12 +45,17 @@ public class GameService implements IGameService {
 
     @Override
     public long updateGame(long gameId, Integer homeTeamScore, Integer awayTeamScore) {
+        return updateGame(gameId, homeTeamScore, awayTeamScore, ZonedDateTime.now());
+    }
+
+    @Override
+    public long updateGame(long gameId, Integer homeTeamScore, Integer awayTeamScore, ZonedDateTime updateTime) {
         Optional<IGame> game = gameRepository.getGameById(gameId);
 
         return game.map(foundGame -> {
                     foundGame.setAwayTeamScore(awayTeamScore);
                     foundGame.setHomeTeamScore(homeTeamScore);
-                    foundGame.setStartTime(ZonedDateTime.now());
+                    foundGame.setStartTime(updateTime);
                     foundGame.setStatus(GameStatusEnum.STARTED);
                     return gameRepository.saveOrUpdateGame(foundGame);
                 })

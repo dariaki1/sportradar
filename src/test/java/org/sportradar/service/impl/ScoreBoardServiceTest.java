@@ -11,10 +11,10 @@ import org.sportradar.model.impl.Game;
 import org.sportradar.model.impl.Team;
 import org.sportradar.repository.impl.GameRepository;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
 import static org.sportradar.model.CountryEnum.*;
@@ -23,7 +23,6 @@ public class ScoreBoardServiceTest {
 
     private static final long TEAM_ID_1 = 1l;
     private static final long TEAM_ID_2 = 2l;
-
 
     private static ScoreBoardService boardService;
 
@@ -34,7 +33,6 @@ public class ScoreBoardServiceTest {
     public static void beforeClass(){
         gameRepository= new GameRepository();
         gameService = new GameService(gameRepository);
-
         boardService = new ScoreBoardService(gameService);
     }
 
@@ -163,7 +161,8 @@ public class ScoreBoardServiceTest {
     }
 
     @Test
-    public void shouldReturnStartedGamesOrdered() throws InterruptedException {
+    public void shouldReturnStartedGamesOrdered() {
+
         //before
         long teamId3 = 3L;
         long teamId4 = 4l;
@@ -177,15 +176,17 @@ public class ScoreBoardServiceTest {
         long game4 = createNewGame(teamId7, teamId8, URUGUAY.name(), ITALY.name(), "game4");
         long game5 = createNewGame(11L, 12L, ARGENTINA.name(), AUSTRALIA.name(), "game5");
 
-        boardService.updateGame(game1, 0, 5);
-        TimeUnit.SECONDS.sleep(1);
-        boardService.updateGame(game2, 10, 2);
-        TimeUnit.SECONDS.sleep(1);
-        boardService.updateGame(game3, 2, 2);
-        TimeUnit.SECONDS.sleep(1);
-        boardService.updateGame(game4, 6, 6);
-        TimeUnit.SECONDS.sleep(1);
-        boardService.updateGame(game5, 3, 1);
+        ZonedDateTime updateTime = ZonedDateTime.now();
+
+        boardService.updateGame(game1, 0, 5, updateTime);
+      //  TimeUnit.SECONDS.sleep(1);
+        boardService.updateGame(game2, 10, 2, updateTime.plusMinutes(1));
+     //   TimeUnit.SECONDS.sleep(1);
+        boardService.updateGame(game3, 2, 2, updateTime.plusMinutes(2));
+      //  TimeUnit.SECONDS.sleep(1);
+        boardService.updateGame(game4, 6, 6, updateTime.plusMinutes(3));
+      //  TimeUnit.SECONDS.sleep(1);
+        boardService.updateGame(game5, 3, 1, updateTime.plusMinutes(4));
 
 
         final List<IGame> expectedGamesOrdered = new ArrayList<>(Arrays.asList(
@@ -203,7 +204,8 @@ public class ScoreBoardServiceTest {
     }
 
     @Test
-    public void shouldFilterOutAndReturnOnlyStartedGamesOrdered() throws InterruptedException {
+    public void shouldFilterOutAndReturnOnlyStartedGamesOrdered() {
+
         //before
         long teamId3 = 3L;
         long teamId4 = 4l;
@@ -218,13 +220,15 @@ public class ScoreBoardServiceTest {
         long game2 = createNewGame(teamId3, teamId4, "game2");
         long game4 = createNewGame(teamId7, teamId8, "game4");
 
-        boardService.updateGame(game1, 0, 5);
-        TimeUnit.SECONDS.sleep(1);
-        boardService.updateGame(game2, 6, 6);
-        TimeUnit.SECONDS.sleep(1);
-        boardService.updateGame(game3, 10, 2);
-        TimeUnit.SECONDS.sleep(1);
-        boardService.updateGame(game4, 15, 10);
+        ZonedDateTime updateTime = ZonedDateTime.now();
+
+        boardService.updateGame(game1, 0, 5, updateTime);
+  //      TimeUnit.SECONDS.sleep(1);
+        boardService.updateGame(game2, 6, 6, updateTime.plusMinutes(1));
+    //    TimeUnit.SECONDS.sleep(1);
+        boardService.updateGame(game3, 10, 2, updateTime.plusMinutes(2));
+     //   TimeUnit.SECONDS.sleep(1);
+        boardService.updateGame(game4, 15, 10, updateTime.plusMinutes(3));
 
         boardService.finishGame(game4);
 

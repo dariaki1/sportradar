@@ -3,6 +3,7 @@ package org.sportradar.service;
 import org.sportradar.model.IGame;
 import org.sportradar.model.ITeam;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 /**
@@ -37,6 +38,8 @@ public interface IScoreBoardService {
      * @return id of updated game
      */
     long updateGame(long gameId, Integer homeTeamScore, Integer awayTeamScore);
+    long updateGame(long gameId, Integer homeTeamScore, Integer awayTeamScore, ZonedDateTime updateTime);
+
 
     /**
      * Finish game which is currently in progress
