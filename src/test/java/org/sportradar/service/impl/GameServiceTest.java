@@ -9,6 +9,8 @@ import org.sportradar.model.IGame;
 import org.sportradar.model.impl.Game;
 import org.sportradar.model.impl.Team;
 import org.sportradar.repository.impl.GameRepository;
+import org.sportradar.util.ITeamValidator;
+import org.sportradar.util.impl.TeamValidator;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import static java.lang.String.format;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.sportradar.model.CountryEnum.*;
 import static org.sportradar.model.GameTypeEnum.BASEBALL;
 
 public class GameServiceTest {
@@ -27,18 +30,20 @@ public class GameServiceTest {
     private static final long TEAM_ID_2 = 2l;
     private GameService gameService;
     private GameRepository gameRepository;
+    private ITeamValidator teamValidator = new TeamValidator();
 
     @Before
     public void before() {
         gameRepository = spy(new GameRepository());
         gameService = new GameService(gameRepository);
+        gameService.setTeamValidator(teamValidator);
     }
 
     @Test
     public void shouldCreateNewBaseballGame_ignoreCase() {
         //before
-        Team homeTeam = Team.newBuilder(TEAM_ID_1).build();
-        Team awayTeam = Team.newBuilder(TEAM_ID_2).build();
+        Team homeTeam = Team.newBuilder(TEAM_ID_1).country(GERMANY.name()).build();
+        Team awayTeam = Team.newBuilder(TEAM_ID_2).country(AUSTRALIA.name()).build();
         String description = "testGame";
 
         //when
@@ -174,14 +179,14 @@ public class GameServiceTest {
     }
 
     @Test
-    public void shouldReturnGamesInProgress(){
+    public void shouldReturnGamesInProgress() {
         long newGameId = createNewGame(TEAM_ID_1, TEAM_ID_2);
         long newGameId2 = createNewGame(3L, 4L);
         long newGameId3 = createNewGame(5L, 6L);
         int homeTeamScore = 6;
         int awayTeamScore = 12;
         gameService.updateGame(newGameId, homeTeamScore, awayTeamScore);
-        gameService.updateGame(newGameId2, +1, awayTeamScore+1);
+        gameService.updateGame(newGameId2, +1, awayTeamScore + 1);
         gameService.finishGame(newGameId2);
         final List<IGame> expected = new ArrayList<>(Arrays.asList(
                 gameRepository.getGameById(newGameId).get()));
@@ -195,8 +200,8 @@ public class GameServiceTest {
 
 
     private long createNewGame(long homeTeamId, long awayTeamId) {
-        Team homeTeam = Team.newBuilder(homeTeamId).build();
-        Team awayTeam = Team.newBuilder(awayTeamId).build();
+        Team homeTeam = Team.newBuilder(homeTeamId).country(MEXICO.name()).build();
+        Team awayTeam = Team.newBuilder(awayTeamId).country(URUGUAY.name()).build();
 
         return gameService.createGame(homeTeam, awayTeam, null, BASEBALL.name());
     }

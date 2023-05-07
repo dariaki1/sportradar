@@ -8,6 +8,7 @@ import org.sportradar.model.ITeam;
 import org.sportradar.model.impl.Game;
 import org.sportradar.repository.IGameRepository;
 import org.sportradar.service.IGameService;
+import org.sportradar.util.ITeamValidator;
 
 import java.time.ZonedDateTime;
 import java.util.Comparator;
@@ -21,6 +22,7 @@ import static java.lang.String.format;
 public class GameService implements IGameService {
 
     private IGameRepository gameRepository;
+    private ITeamValidator teamValidator;
 
     public GameService(IGameRepository gameRepository) {
         this.gameRepository = gameRepository;
@@ -28,15 +30,7 @@ public class GameService implements IGameService {
 
     @Override
     public long createGame(ITeam homeTeam, ITeam awayTeam, String description, String gameType) {
-        if (homeTeam == null) {
-            throw new IncorrectGameParameterException("home team is null");
-        }
-        if (awayTeam == null) {
-            throw new IncorrectGameParameterException("away team is null");
-        }
-        if (GameTypeEnum.forNameIgnoreCase(gameType) == null) {
-            throw new IncorrectGameParameterException(format("Game type [%s] is not supported", gameType));
-        }
+        validateInputParameters(homeTeam, awayTeam, gameType);
 
         IGame newGame = Game.newBuilder(new Random().nextLong(), GameTypeEnum.forNameIgnoreCase(gameType))
                 .homeTeam(homeTeam)
@@ -96,4 +90,34 @@ public class GameService implements IGameService {
 
         return gamesSorted;
     }
+
+
+    public ITeamValidator getTeamValidator() {
+        return teamValidator;
+    }
+
+    public void setTeamValidator(ITeamValidator teamValidator) {
+        this.teamValidator = teamValidator;
+    }
+
+
+    private void validateInputParameters(ITeam homeTeam, ITeam awayTeam, String gameType) {
+        if (GameTypeEnum.forNameIgnoreCase(gameType) == null) {
+            throw new IncorrectGameParameterException(format("Game type [%s] is not supported", gameType));
+        }
+
+        if (homeTeam == null) {
+            throw new IncorrectGameParameterException("home team is null");
+        }
+        if (awayTeam == null) {
+            throw new IncorrectGameParameterException("away team is null");
+        }
+        if (teamValidator != null) {
+            teamValidator.validate(homeTeam);
+            teamValidator.validate(awayTeam);
+        }
+
+    }
+
+
 }

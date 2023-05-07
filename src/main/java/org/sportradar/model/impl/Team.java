@@ -7,10 +7,9 @@ import org.sportradar.model.ITeam;
  * This class represents team entity
  */
 public class Team implements ITeam {
-//TODO add Builder constructor
+
     private final long id;
     private String title; //TODO add validation
-
     private String country; //TODO add validation
 
     public Team(long id) {

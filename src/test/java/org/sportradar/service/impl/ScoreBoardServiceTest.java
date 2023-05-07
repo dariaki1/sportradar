@@ -9,6 +9,8 @@ import org.sportradar.model.IGame;
 import org.sportradar.model.impl.Game;
 import org.sportradar.model.impl.Team;
 import org.sportradar.repository.impl.GameRepository;
+import org.sportradar.util.ITeamValidator;
+import org.sportradar.util.impl.TeamValidator;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -30,19 +32,21 @@ public class ScoreBoardServiceTest {
     private ScoreBoardService boardService;
     private GameService gameService;
     private GameRepository gameRepository;
+    private ITeamValidator teamValidator = new TeamValidator();
 
     @Before
     public void before() {
         gameRepository = new GameRepository();
         gameService = spy(new GameService(gameRepository));
+        gameService.setTeamValidator(teamValidator);
         boardService = new ScoreBoardService(gameService);
     }
 
     @Test
     public void shouldCreateNewFootballGame() {
         //before
-        Team homeTeam = Team.newBuilder(TEAM_ID_1).build();
-        Team awayTeam = Team.newBuilder(TEAM_ID_2).build();
+        Team homeTeam = Team.newBuilder(TEAM_ID_1).country(URUGUAY.name()).build();
+        Team awayTeam = Team.newBuilder(TEAM_ID_2).country(GERMANY.name()).build();
 
         //when
         long newGameId = boardService.createNewFootballGame(homeTeam, awayTeam);
@@ -278,7 +282,7 @@ public class ScoreBoardServiceTest {
     }
 
     private long createNewGame(long homeTeamId, long awayTeamId, String description) {
-        return createNewGame(homeTeamId, awayTeamId, null, null, description);
+        return createNewGame(homeTeamId, awayTeamId, AUSTRALIA.name(), MEXICO.name(), description);
     }
 
     private long createNewGame(long homeTeamId, long awayTeamId, String homeCountry, String awayCountry, String description) {
