@@ -20,9 +20,12 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
+/**
+ * Default implementation of IGame service
+ */
 public class GameService implements IGameService {
 
-    private IGameRepository gameRepository;
+    private final IGameRepository gameRepository;
     private ITeamValidator teamValidator;
     private IGameValidator gameValidator;
 
@@ -86,7 +89,7 @@ public class GameService implements IGameService {
 
         Comparator<IGame> compareByStartTimeAndScore = Comparator
                 .comparing((IGame game) -> {
-                            Integer score = game.getAwayTeamScore() + game.getHomeTeamScore();
+                            int score = game.getAwayTeamScore() + game.getHomeTeamScore();
                             return score;
                         }
                 )

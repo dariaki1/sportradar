@@ -12,7 +12,15 @@ public interface ITeam {
      */
     long getId();
 
+    /**
+     * Get team title
+     * @return string title
+     */
     String getTitle();
 
+    /**
+     * Get team country
+     * @return team country
+     */
     String getCountry();
 }

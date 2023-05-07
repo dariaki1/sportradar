@@ -21,19 +21,18 @@ import java.util.List;
 
 import static java.lang.String.format;
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.sportradar.model.CountryEnum.*;
 import static org.sportradar.model.GameTypeEnum.BASEBALL;
 
 public class GameServiceTest {
 
-    private static final long TEAM_ID_1 = 1l;
-    private static final long TEAM_ID_2 = 2l;
+    private static final long TEAM_ID_1 = 1L;
+    private static final long TEAM_ID_2 = 2L;
     private GameService gameService;
     private GameRepository gameRepository;
-    private ITeamValidator teamValidator = new TeamValidator();
-    private IGameValidator gameValidator = new GameValidator();
+    private final ITeamValidator teamValidator = new TeamValidator();
+    private final IGameValidator gameValidator = new GameValidator();
 
     @Before
     public void before() {
@@ -74,9 +73,7 @@ public class GameServiceTest {
         String gameType = "incorrectGameType";
 
         //when
-        Exception exception = assertThrows(IncorrectGameParameterException.class, () -> {
-            gameService.createGame(homeTeam, awayTeam, null, gameType);
-        });
+        Exception exception = assertThrows(IncorrectGameParameterException.class, () -> gameService.createGame(homeTeam, awayTeam, null, gameType));
 
         //then
         String expectedMessage = format("Game type [%s] is not supported", gameType);
@@ -90,11 +87,11 @@ public class GameServiceTest {
     public void shouldFailToUpdateIfGameNotFound() {
         //when
         Exception exception = assertThrows(IncorrectGameParameterException.class, () -> {
-            gameService.updateGame(3l, 9, 10);
+            gameService.updateGame(3L, 9, 10);
         });
 
         //then
-        String expectedMessage = format("Game with id %d not found", 3l);
+        String expectedMessage = format("Game with id %d not found", 3L);
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));

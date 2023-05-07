@@ -10,7 +10,7 @@ public interface IGame {
     /**
      * Returns game id
      *
-     * @return
+     * @return id of exact game
      */
     long getId();
 
@@ -27,25 +27,63 @@ public interface IGame {
      */
     GameStatusEnum getStatus();
 
-    public ITeam getHomeTeam();
+    /**
+     * Return home team
+     * @return home team
+     */
+    ITeam getHomeTeam();
 
+    /**
+     * Return away team
+     * @return away team
+     */
+    ITeam getAwayTeam();
 
-    public ITeam getAwayTeam();
+    /**
+     * Return current home team score
+     * @return home team score
+     */
+    Integer getHomeTeamScore();
 
-    public Integer getHomeTeamScore();
+    /**
+     * Set home team score
+     * @param homeTeamScore to set
+     */
+    void setHomeTeamScore(Integer homeTeamScore);
 
-    public void setHomeTeamScore(Integer homeTeamScore);
+    /**
+     * Return current away team score
+     * @return away team score
+     */
+    Integer getAwayTeamScore();
 
-    public Integer getAwayTeamScore();
+    /**
+     * Set away team score
+     * @param awayTeamScore to set
+     */
+    void setAwayTeamScore(Integer awayTeamScore) ;
 
-    public void setAwayTeamScore(Integer awayTeamScore) ;
+    /**
+     * Changes game status
+     * @param status to set
+     */
+    void setStatus(GameStatusEnum status);
 
-    public void setStatus(GameStatusEnum status);
+    /**
+     * Get exact time when game changed status to STARTED
+     */
+    ZonedDateTime getStartTime() ;
 
-    public ZonedDateTime getStartTime() ;
+    /**
+     * Set start time
+     * @param startTime to set
+     */
+    void setStartTime(ZonedDateTime startTime);
 
-    public void setStartTime(ZonedDateTime startTime);
-
+    /**
+     * Get game description
+     * @return string description
+     */
     String getDescription();
 
 }

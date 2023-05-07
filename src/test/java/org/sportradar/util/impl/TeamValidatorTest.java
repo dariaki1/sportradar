@@ -11,7 +11,7 @@ import static org.sportradar.model.CountryEnum.MEXICO;
 
 public class TeamValidatorTest {
 
-    private TeamValidator validator = new TeamValidator();
+    private final TeamValidator validator = new TeamValidator();
 
     @Test
     public void shouldThrowIfCountryIsEmpty() {

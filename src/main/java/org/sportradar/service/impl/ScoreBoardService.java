@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class ScoreBoardService implements IScoreBoardService {
 
     private static final String SCOREBOARD_TITLE = "Live Football World Cup Scoreboard";
-    private IGameService gameService;
+    private final IGameService gameService;
 
     public ScoreBoardService(IGameService gameService) {
         this.gameService = gameService;

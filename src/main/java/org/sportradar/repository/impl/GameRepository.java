@@ -16,7 +16,7 @@ import java.util.stream.IntStream;
 public class GameRepository implements IGameRepository {
 
     //Collection which imitates real database
-    private List<IGame> gameDatabase = new ArrayList<>();
+    private final List<IGame> gameDatabase = new ArrayList<>();
     @Override
     public Optional<IGame> getGameById(long id) {
         return gameDatabase.stream()

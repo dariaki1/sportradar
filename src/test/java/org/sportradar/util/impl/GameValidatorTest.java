@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 public class GameValidatorTest {
 
-    private GameValidator validator = new GameValidator();
+    private final GameValidator validator = new GameValidator();
 
     @Test
     public void shouldThrowIfHomeScoreLessThatZero() {
@@ -26,9 +26,7 @@ public class GameValidatorTest {
                 .build();
 
         //when
-        Exception exception = assertThrows(IncorrectGameParameterException.class, () -> {
-            validator.validate(newGame);
-        });
+        Exception exception = assertThrows(IncorrectGameParameterException.class, () -> validator.validate(newGame));
 
         //then
         String expectedMessage = "Error creating game with id 1 : Game home team score should be >= 0";
@@ -50,9 +48,7 @@ public class GameValidatorTest {
                 .build();
 
         //when
-        Exception exception = assertThrows(IncorrectGameParameterException.class, () -> {
-            validator.validate(newGame);
-        });
+        Exception exception = assertThrows(IncorrectGameParameterException.class, () -> validator.validate(newGame));
 
         //then
         String expectedMessage = "Error creating game with id 1 : Game away team score should be >= 0";
@@ -73,9 +69,7 @@ public class GameValidatorTest {
                 .build();
 
         //when
-        Exception exception = assertThrows(IncorrectGameParameterException.class, () -> {
-            validator.validate(newGame);
-        });
+        Exception exception = assertThrows(IncorrectGameParameterException.class, () -> validator.validate(newGame));
 
         //then
         String expectedMessage = "Error creating game with id 1 : Game description length should be empty or between 0 and 150 characters";

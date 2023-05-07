@@ -29,13 +29,13 @@ import static org.sportradar.model.GameTypeEnum.FOOTBALL;
 
 public class ScoreBoardServiceTest {
 
-    private static final long TEAM_ID_1 = 1l;
-    private static final long TEAM_ID_2 = 2l;
+    private static final long TEAM_ID_1 = 1L;
+    private static final long TEAM_ID_2 = 2L;
     private ScoreBoardService boardService;
     private GameService gameService;
     private GameRepository gameRepository;
-    private ITeamValidator teamValidator = new TeamValidator();
-    private IGameValidator gameValidator = new GameValidator();
+    private final ITeamValidator teamValidator = new TeamValidator();
+    private final IGameValidator gameValidator = new GameValidator();
 
     @Before
     public void before() {
@@ -183,10 +183,10 @@ public class ScoreBoardServiceTest {
     public void shouldReturnStartedGamesOrdered() {
         //before
         long teamId3 = 3L;
-        long teamId4 = 4l;
+        long teamId4 = 4L;
         long teamId5 = 5L;
         long teamId6 = 6L;
-        long teamId7 = 7l;
+        long teamId7 = 7L;
         long teamId8 = 8L;
         long game1 = createNewGame(TEAM_ID_1, TEAM_ID_2, MEXICO.name(), CANADA.name(), "game1");
         long game2 = createNewGame(teamId3, teamId4, SPAIN.name(), BRAZIL.name(), "game2");
@@ -221,10 +221,10 @@ public class ScoreBoardServiceTest {
     public void shouldFilterOutAndReturnOnlyStartedGamesOrdered() {
         //before
         long teamId3 = 3L;
-        long teamId4 = 4l;
+        long teamId4 = 4L;
         long teamId5 = 5L;
         long teamId6 = 6L;
-        long teamId7 = 7l;
+        long teamId7 = 7L;
         long teamId8 = 8L;
         long game1 = createNewGame(TEAM_ID_1, TEAM_ID_2, "game1");
         long game3 = createNewGame(teamId5, teamId6, "game3");

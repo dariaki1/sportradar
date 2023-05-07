@@ -26,7 +26,7 @@ public class GameRepositoryTest {
     @Test
     public void shouldReturnEmptyOptionalIfNotFound() {
         //when
-        Optional<IGame> result = gameRepository.getGameById(1l);
+        Optional<IGame> result = gameRepository.getGameById(1L);
 
         //then
         assertFalse(result.isPresent());

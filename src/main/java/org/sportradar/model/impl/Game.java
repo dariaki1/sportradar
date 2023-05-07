@@ -15,7 +15,7 @@ public class Game implements IGame {
 
     private final long id;
     private String description;
-    private GameTypeEnum type;
+    private final GameTypeEnum type;
 
     private ZonedDateTime startTime;
 
@@ -123,9 +123,9 @@ public class Game implements IGame {
 
     public static class Builder {
 
-        private long id;
+        private final long id;
         private String description;
-        private GameTypeEnum type;
+        private final GameTypeEnum type;
 
         private GameStatusEnum status;
 

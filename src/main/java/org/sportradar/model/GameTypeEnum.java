@@ -14,7 +14,7 @@ public enum GameTypeEnum {
     /**
      * Represents case-insensitive search for enum
      *
-     * @param value
+     * @param value to check
      * @return corresponding enum or null of not found
      */
     static public GameTypeEnum forNameIgnoreCase(String value) {
