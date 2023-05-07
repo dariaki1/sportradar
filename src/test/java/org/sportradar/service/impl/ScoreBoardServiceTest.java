@@ -1,7 +1,7 @@
 package org.sportradar.service.impl;
 
 import org.junit.After;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.sportradar.exception.IncorrectGameParameterException;
 import org.sportradar.model.GameStatusEnum;
@@ -27,14 +27,12 @@ public class ScoreBoardServiceTest {
 
     private static final long TEAM_ID_1 = 1l;
     private static final long TEAM_ID_2 = 2l;
+    private ScoreBoardService boardService;
+    private GameService gameService;
+    private GameRepository gameRepository;
 
-    private static ScoreBoardService boardService;
-
-    private static GameService gameService;
-    private static GameRepository gameRepository;
-
-    @BeforeClass
-    public static void beforeClass() {
+    @Before
+    public void before() {
         gameRepository = new GameRepository();
         gameService = spy(new GameService(gameRepository));
         boardService = new ScoreBoardService(gameService);
@@ -244,6 +242,34 @@ public class ScoreBoardServiceTest {
 
         //then
         assertEquals(expectedGamesOrdered, result);
+    }
+
+    @Test
+    public void shouldReturnTitle() {
+        assertEquals("Live Football World Cup Scoreboard", boardService.getScoreBoardTitle());
+    }
+
+    @Test
+    public void shouldReturnBoardSummaryAsString() {
+        //when
+        Team homeTeam = Team.newBuilder(1L).country(MEXICO.name()).build();
+        Team awayTeam = Team.newBuilder(2L).country(ARGENTINA.name()).build();
+        long gameId1 = boardService.createNewFootballGame(homeTeam, awayTeam, "new game 1");
+        Team homeTeam2 = Team.newBuilder(3L).country(GERMANY.name()).build();
+        Team awayTeam2 = Team.newBuilder(4L).country(URUGUAY.name()).build();
+        long gameId2 = boardService.createNewFootballGame(homeTeam2, awayTeam2, "new game 2");
+        boardService.updateGame(gameId1, 5, 2);
+        boardService.updateGame(gameId2, 7, 4);
+
+        //when
+        String actual = boardService.printGamesInProgressSummary();
+
+        //then
+        String expected = "Live Football World Cup Scoreboard summary:\n" +
+                "\n" +
+                "GERMANY 7 - URUGUAY 4\n" +
+                "MEXICO 5 - ARGENTINA 2\n";
+        assertEquals(expected, actual);
     }
 
 

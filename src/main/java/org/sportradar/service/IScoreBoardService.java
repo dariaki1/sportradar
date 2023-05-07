@@ -19,6 +19,8 @@ public interface IScoreBoardService {
      */
     List<IGame> getGamesInProgressSummary();
 
+    String printGamesInProgressSummary();
+
     /**
      * Creates new game assuming initial score 0 – 0 and adding it the scoreboard
      * @param homeTeam
@@ -47,6 +49,8 @@ public interface IScoreBoardService {
      * @return id of finished game
      */
     long finishGame(long gameId);
+
+    String getScoreBoardTitle();
 
 
 

@@ -8,12 +8,14 @@ import org.sportradar.service.IScoreBoardService;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Initial implementation of Score Board functionality
  */
 public class ScoreBoardService implements IScoreBoardService {
 
+    private static final String SCOREBOARD_TITLE = "Live Football World Cup Scoreboard";
     private IGameService gameService;
 
     public ScoreBoardService(IGameService gameService) {
@@ -26,6 +28,23 @@ public class ScoreBoardService implements IScoreBoardService {
     @Override
     public List<IGame> getGamesInProgressSummary() {
         return gameService.getGamesInProgressSummary();
+    }
+
+    @Override
+    public String printGamesInProgressSummary() {
+        List<IGame> gamesInProgress = getGamesInProgressSummary();
+
+        String gamesSummary = gamesInProgress.stream()
+                        .map(game -> {
+                            return String.format("%s %d - %s %d\n",
+                                    game.getHomeTeam().getCountry(),
+                                    game.getHomeTeamScore(),
+                                    game.getAwayTeam().getCountry(),
+                                    game.getAwayTeamScore());
+
+                        }).collect(Collectors.joining());
+
+        return SCOREBOARD_TITLE + " summary:\n\n"+gamesSummary;
     }
 
     /**
@@ -63,5 +82,10 @@ public class ScoreBoardService implements IScoreBoardService {
     @Override
     public long finishGame(long gameId) {
         return gameService.finishGame(gameId);
+    }
+
+    @Override
+    public String getScoreBoardTitle() {
+        return SCOREBOARD_TITLE;
     }
 }

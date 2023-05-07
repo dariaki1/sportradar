@@ -17,3 +17,6 @@ For regular build run the following command:
 To skip tests run and compilation run the following command:
 
 ```mvn clean install -Dmaven.test.skip=true```
+
+## Usage
+Usage example can be found in ExampleApp class
