@@ -174,6 +174,11 @@ public class Game implements IGame {
             return this;
         }
 
+        public Builder status(GameStatusEnum status) {
+            this.status = status;
+            return this;
+        }
+
         public Game build() {
             return new Game(this);
         }
