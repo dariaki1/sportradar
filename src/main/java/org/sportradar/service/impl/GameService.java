@@ -16,6 +16,8 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+
 public class GameService implements IGameService {
 
     private IGameRepository gameRepository;
@@ -32,8 +34,11 @@ public class GameService implements IGameService {
         if (awayTeam == null) {
             throw new IncorrectGameParameterException("away team is null");
         }
+        if (GameTypeEnum.forNameIgnoreCase(gameType) == null) {
+            throw new IncorrectGameParameterException(format("Game type [%s] is not supported", gameType));
+        }
 
-        IGame newGame = Game.newBuilder(new Random().nextLong(), GameTypeEnum.valueOf(gameType))
+        IGame newGame = Game.newBuilder(new Random().nextLong(), GameTypeEnum.forNameIgnoreCase(gameType))
                 .homeTeam(homeTeam)
                 .awayTeam(awayTeam)
                 .homeTeamScore(0)
@@ -59,7 +64,7 @@ public class GameService implements IGameService {
                     foundGame.setStatus(GameStatusEnum.STARTED);
                     return gameRepository.saveOrUpdateGame(foundGame);
                 })
-                .orElseThrow(() -> new IncorrectGameParameterException(String.format("Game with id %d not found", gameId)));
+                .orElseThrow(() -> new IncorrectGameParameterException(format("Game with id %d not found", gameId)));
     }
 
     @Override
@@ -70,7 +75,7 @@ public class GameService implements IGameService {
                     foundGame.setStatus(GameStatusEnum.FINISHED);
                     return gameRepository.saveOrUpdateGame(foundGame);
                 })
-                .orElseThrow(() -> new IncorrectGameParameterException(String.format("Game with id %d not found", gameId)));
+                .orElseThrow(() -> new IncorrectGameParameterException(format("Game with id %d not found", gameId)));
     }
 
     @Override
