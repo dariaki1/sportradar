@@ -42,6 +42,14 @@ public class Team implements ITeam {
         return new Builder(id);
     }
 
+    @Override
+    public String toString() {
+        return "Team{" +
+                "id=" + id +
+                ", country='" + country + '\'' +
+                '}';
+    }
+
     public static class Builder {
 
         private final long id;

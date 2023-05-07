@@ -110,6 +110,17 @@ public class Game implements IGame {
         return new Builder(id, type);
     }
 
+    @Override
+    public String toString() {
+        return "Game{" +
+                "id=" + id +
+                ", homeTeam=" + homeTeam +
+                ", awayTeam=" + awayTeam +
+                ", homeTeamScore=" + homeTeamScore +
+                ", awayTeamScore=" + awayTeamScore +
+                '}';
+    }
+
     public static class Builder {
 
         private long id;

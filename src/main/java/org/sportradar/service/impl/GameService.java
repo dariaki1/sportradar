@@ -77,8 +77,8 @@ public class GameService implements IGameService {
                             Integer score = game.getAwayTeamScore() + game.getHomeTeamScore();
                             return score;
                         }
-                ).reversed()
-                .thenComparing(IGame::getStartTime);
+                )
+                .thenComparing(IGame::getStartTime).reversed();
 
         List<IGame> gamesSorted = gamesInProgress.stream()
                 .sorted(compareByStartTimeAndScore)

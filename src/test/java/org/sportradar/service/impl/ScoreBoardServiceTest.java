@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
+import static org.sportradar.model.CountryEnum.*;
 
 public class ScoreBoardServiceTest {
 
@@ -151,9 +152,8 @@ public class ScoreBoardServiceTest {
     @Test
     public void shouldFailToFinishGameIfGameNotFound() {
         //when
-        Exception exception = assertThrows(IncorrectGameParameterException.class, () -> {
-            boardService.finishGame(3L);
-        });
+        Exception exception = assertThrows(IncorrectGameParameterException.class,
+                () -> boardService.finishGame(3L));
 
         //then
         String expectedMessage = "Game with id 3 not found";
@@ -171,11 +171,52 @@ public class ScoreBoardServiceTest {
         long teamId6 = 6L;
         long teamId7 = 7l;
         long teamId8 = 8L;
+        long game1 = createNewGame(TEAM_ID_1, TEAM_ID_2, MEXICO.name(), CANADA.name(), "game1");
+        long game2 = createNewGame(teamId3, teamId4, SPAIN.name(), BRAZIL.name(),"game2");
+        long game3 = createNewGame(teamId5, teamId6,  GERMANY.name(), FRANCE.name(), "game3");
+        long game4 = createNewGame(teamId7, teamId8, URUGUAY.name(), ITALY.name(), "game4");
+        long game5 = createNewGame(11L, 12L, ARGENTINA.name(), AUSTRALIA.name(), "game5");
+
+        boardService.updateGame(game1, 0, 5);
+        TimeUnit.SECONDS.sleep(1);
+        boardService.updateGame(game2, 10, 2);
+        TimeUnit.SECONDS.sleep(1);
+        boardService.updateGame(game3, 2, 2);
+        TimeUnit.SECONDS.sleep(1);
+        boardService.updateGame(game4, 6, 6);
+        TimeUnit.SECONDS.sleep(1);
+        boardService.updateGame(game5, 3, 1);
+
+
+        final List<IGame> expectedGamesOrdered = new ArrayList<>(Arrays.asList(
+                gameRepository.getGameById(game4).get(),
+                gameRepository.getGameById(game2).get(),
+                gameRepository.getGameById(game1).get(),
+                gameRepository.getGameById(game5).get(),
+                gameRepository.getGameById(game3).get()));
+
+        //when
+        List<IGame> result = boardService.getGamesInProgressSummary();
+
+        //then
+        assertEquals(expectedGamesOrdered, result);
+    }
+
+    @Test
+    public void shouldFilterOutAndReturnOnlyStartedGamesOrdered() throws InterruptedException {
+        //before
+        long teamId3 = 3L;
+        long teamId4 = 4l;
+        long teamId5 = 5L;
+        long teamId6 = 6L;
+        long teamId7 = 7l;
+        long teamId8 = 8L;
+        long teamId9 = 9l;
+        long teamId10 = 10L;
         long game1 = createNewGame(TEAM_ID_1, TEAM_ID_2, "game1");
         long game3 = createNewGame(teamId5, teamId6, "game3");
         long game2 = createNewGame(teamId3, teamId4, "game2");
         long game4 = createNewGame(teamId7, teamId8, "game4");
-
 
         boardService.updateGame(game1, 0, 5);
         TimeUnit.SECONDS.sleep(1);
@@ -188,15 +229,16 @@ public class ScoreBoardServiceTest {
         boardService.finishGame(game4);
 
         final List<IGame> expectedGamesOrdered = new ArrayList<>(Arrays.asList(
-                gameRepository.getGameById(game2).get(),
                 gameRepository.getGameById(game3).get(),
+                gameRepository.getGameById(game2).get(),
+
                 gameRepository.getGameById(game1).get()));
 
         //when
         List<IGame> result = boardService.getGamesInProgressSummary();
 
         //then
-        assertEquals(expectedGamesOrdered, result);;
+        assertEquals(expectedGamesOrdered, result);
     }
 
 
@@ -206,8 +248,12 @@ public class ScoreBoardServiceTest {
     }
 
     private long createNewGame(long homeTeamId, long awayTeamId, String description){
-        Team homeTeam = Team.newBuilder(homeTeamId).build();
-        Team awayTeam = Team.newBuilder(awayTeamId).build();
+        return createNewGame(homeTeamId, awayTeamId, null, null,description);
+    }
+
+    private long createNewGame(long homeTeamId, long awayTeamId, String homeCountry, String awayCountry, String description) {
+        Team homeTeam = Team.newBuilder(homeTeamId).country(homeCountry).build();
+        Team awayTeam = Team.newBuilder(awayTeamId).country(awayCountry).build();
 
         return boardService.createNewFootballGame(homeTeam, awayTeam, description);
     }
