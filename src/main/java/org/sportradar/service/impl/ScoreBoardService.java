@@ -32,7 +32,15 @@ public class ScoreBoardService implements IScoreBoardService {
      */
     @Override
     public long createNewFootballGame(ITeam homeTeam, ITeam awayTeam) {
-        return gameService.createGame(homeTeam, awayTeam, GameTypeEnum.FOOTBALL.toString());
+        return createNewFootballGame(homeTeam, awayTeam, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public long createNewFootballGame(ITeam homeTeam, ITeam awayTeam, String description) {
+        return gameService.createGame(homeTeam, awayTeam, description, GameTypeEnum.FOOTBALL.toString());
     }
 
     /**

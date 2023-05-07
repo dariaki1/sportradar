@@ -46,4 +46,6 @@ public interface IGame {
 
     public void setStartTime(ZonedDateTime startTime);
 
+    String getDescription();
+
 }

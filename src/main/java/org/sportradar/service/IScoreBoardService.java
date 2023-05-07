@@ -26,6 +26,8 @@ public interface IScoreBoardService {
      */
     long createNewFootballGame(ITeam homeTeam, ITeam awayTeam);
 
+    long createNewFootballGame(ITeam homeTeam, ITeam awayTeam, String decription);
+
     /**
      * Updates existing game score
      *

@@ -25,7 +25,7 @@ public class GameService implements IGameService {
     }
 
     @Override
-    public long createGame(ITeam homeTeam, ITeam awayTeam, String gameType) {
+    public long createGame(ITeam homeTeam, ITeam awayTeam, String description, String gameType) {
         if (homeTeam == null) {
             throw new IncorrectGameParameterException("home team is null");
         }
@@ -38,6 +38,7 @@ public class GameService implements IGameService {
                 .awayTeam(awayTeam)
                 .homeTeamScore(0)
                 .awayTeamScore(0)
+                .description(description)
                 .build();
         return gameRepository.saveOrUpdateGame(newGame);
     }
@@ -68,11 +69,15 @@ public class GameService implements IGameService {
     }
 
     @Override
-    public List<IGame> getGamesInProgressSummary(){
+    public List<IGame> getGamesInProgressSummary() {
         List<IGame> gamesInProgress = gameRepository.getAllStartedGames();
 
         Comparator<IGame> compareByStartTimeAndScore = Comparator
-                .comparing((IGame iGame) -> iGame.getHomeTeamScore()+iGame.getAwayTeamScore())
+                .comparing((IGame game) -> {
+                            Integer score = game.getAwayTeamScore() + game.getHomeTeamScore();
+                            return score;
+                        }
+                ).reversed()
                 .thenComparing(IGame::getStartTime);
 
         List<IGame> gamesSorted = gamesInProgress.stream()

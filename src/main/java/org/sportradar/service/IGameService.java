@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface IGameService {
 
-    long createGame(ITeam homeTeam, ITeam awayTeam, String gameType);
-
     long updateGame(long gameId, Integer homeTeamScore, Integer awayTeamScore);
 
     long finishGame(long gameId);
 
     public List<IGame> getGamesInProgressSummary();
+
+    long createGame(ITeam homeTeam, ITeam awayTeam, String description, String string);
 }

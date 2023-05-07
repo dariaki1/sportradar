@@ -171,10 +171,11 @@ public class ScoreBoardServiceTest {
         long teamId6 = 6L;
         long teamId7 = 7l;
         long teamId8 = 8L;
-        long game1 = createNewGame(TEAM_ID_1, TEAM_ID_2);
-        long game2 = createNewGame(teamId3, teamId4);
-        long game3 = createNewGame(teamId5, teamId6);
-        long game4 = createNewGame(teamId7, teamId8);
+        long game1 = createNewGame(TEAM_ID_1, TEAM_ID_2, "game1");
+        long game3 = createNewGame(teamId5, teamId6, "game3");
+        long game2 = createNewGame(teamId3, teamId4, "game2");
+        long game4 = createNewGame(teamId7, teamId8, "game4");
+
 
         boardService.updateGame(game1, 0, 5);
         TimeUnit.SECONDS.sleep(1);
@@ -195,23 +196,20 @@ public class ScoreBoardServiceTest {
         List<IGame> result = boardService.getGamesInProgressSummary();
 
         //then
-        assertEquals(expectedGamesOrdered, result);
-        //assertTrue(CollectionUtils.isEqualCollection(result, expectedGamesOrdered));
-
-
-
-
-
+        assertEquals(expectedGamesOrdered, result);;
     }
 
 
 
     private long createNewGame(long homeTeamId, long awayTeamId){
-        //before
+        return createNewGame(homeTeamId, awayTeamId, null);
+    }
+
+    private long createNewGame(long homeTeamId, long awayTeamId, String description){
         Team homeTeam = Team.newBuilder(homeTeamId).build();
         Team awayTeam = Team.newBuilder(awayTeamId).build();
 
-        return boardService.createNewFootballGame(homeTeam, awayTeam);
+        return boardService.createNewFootballGame(homeTeam, awayTeam, description);
     }
 
     @After
