@@ -30,21 +30,24 @@ public class ScoreBoardService implements IScoreBoardService {
         return gameService.getGamesInProgressSummary();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String printGamesInProgressSummary() {
         List<IGame> gamesInProgress = getGamesInProgressSummary();
 
         String gamesSummary = gamesInProgress.stream()
-                        .map(game -> {
-                            return String.format("%s %d - %s %d\n",
-                                    game.getHomeTeam().getCountry(),
-                                    game.getHomeTeamScore(),
-                                    game.getAwayTeam().getCountry(),
-                                    game.getAwayTeamScore());
+                .map(game -> {
+                    return String.format("%s %d - %s %d\n",
+                            game.getHomeTeam().getCountry(),
+                            game.getHomeTeamScore(),
+                            game.getAwayTeam().getCountry(),
+                            game.getAwayTeamScore());
 
-                        }).collect(Collectors.joining());
+                }).collect(Collectors.joining());
 
-        return SCOREBOARD_TITLE + " summary:\n\n"+gamesSummary;
+        return SCOREBOARD_TITLE + " summary:\n\n" + gamesSummary;
     }
 
     /**
@@ -71,6 +74,9 @@ public class ScoreBoardService implements IScoreBoardService {
         return gameService.updateGame(gameId, homeTeamScore, awayTeamScore);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long updateGame(long gameId, Integer homeTeamScore, Integer awayTeamScore, ZonedDateTime updateTime) {
         return gameService.updateGame(gameId, homeTeamScore, awayTeamScore, updateTime);
@@ -84,6 +90,9 @@ public class ScoreBoardService implements IScoreBoardService {
         return gameService.finishGame(gameId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getScoreBoardTitle() {
         return SCOREBOARD_TITLE;

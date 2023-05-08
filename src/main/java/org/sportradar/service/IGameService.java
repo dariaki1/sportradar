@@ -10,6 +10,7 @@ public interface IGameService {
 
     /**
      * Update existing game
+     *
      * @param gameId
      * @param homeTeamScore
      * @param awayTeamScore
@@ -19,6 +20,7 @@ public interface IGameService {
 
     /**
      * Update existing game
+     *
      * @param gameId
      * @param homeTeamScore
      * @param awayTeamScore
@@ -29,6 +31,7 @@ public interface IGameService {
 
     /**
      * Changes game status to FINISHED
+     *
      * @param gameId
      * @return id of updated game
      */
@@ -36,12 +39,14 @@ public interface IGameService {
 
     /**
      * Return list of games in STARTED status
+     *
      * @return
      */
     List<IGame> getGamesInProgressSummary();
 
     /**
      * Creates new game
+     *
      * @param homeTeam
      * @param awayTeam
      * @param description

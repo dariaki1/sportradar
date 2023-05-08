@@ -7,20 +7,19 @@ import org.sportradar.service.IGameService;
 import org.sportradar.service.IScoreBoardService;
 import org.sportradar.service.impl.GameService;
 import org.sportradar.service.impl.ScoreBoardService;
+import org.sportradar.util.impl.GameValidator;
+import org.sportradar.util.impl.TeamValidator;
 
 import static org.sportradar.model.CountryEnum.*;
 
 /**
  * Here you can find example of ScoreBoard usage
- *
  */
-public class ExampleApp
-{
-    public static void main( String[] args )
-    {
+public class ExampleApp {
+    public static void main(String[] args) {
         //init
         IGameRepository repository = new GameRepository();
-        IGameService gameService = new GameService(repository);
+        IGameService gameService = new GameService(repository, new TeamValidator(), new GameValidator());
         IScoreBoardService board = new ScoreBoardService(gameService);
 
         //check title

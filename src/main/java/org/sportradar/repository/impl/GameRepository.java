@@ -17,6 +17,7 @@ public class GameRepository implements IGameRepository {
 
     //Collection which imitates real database
     private final List<IGame> gameDatabase = new ArrayList<>();
+
     @Override
     public Optional<IGame> getGameById(long id) {
         return gameDatabase.stream()

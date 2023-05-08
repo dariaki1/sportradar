@@ -9,6 +9,7 @@ public interface ITeamValidator {
 
     /**
      * Validates ITeam object
+     *
      * @param team
      */
     void validate(ITeam team);

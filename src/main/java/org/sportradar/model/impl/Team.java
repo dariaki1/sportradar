@@ -16,7 +16,7 @@ public class Team implements ITeam {
         this.id = id;
     }
 
-    public Team(Builder builder){
+    public Team(Builder builder) {
         this.id = builder.id;
         this.country = builder.country;
         this.title = builder.title;
@@ -37,7 +37,7 @@ public class Team implements ITeam {
         return country;
     }
 
-    public static Builder newBuilder(long id){
+    public static Builder newBuilder(long id) {
         return new Builder(id);
     }
 
@@ -56,11 +56,11 @@ public class Team implements ITeam {
 
         private String country;
 
-        private Builder(long id){
+        private Builder(long id) {
             this.id = id;
         }
 
-        public Builder title(String title){
+        public Builder title(String title) {
             this.title = title;
             return this;
         }
@@ -70,7 +70,7 @@ public class Team implements ITeam {
             return this;
         }
 
-        public Team build(){
+        public Team build() {
             return new Team(this);
         }
 

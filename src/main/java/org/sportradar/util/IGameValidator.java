@@ -9,6 +9,7 @@ public interface IGameValidator {
 
     /**
      * Validates IGame object
+     *
      * @param game
      */
     void validate(IGame game);

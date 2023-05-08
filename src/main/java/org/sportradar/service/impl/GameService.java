@@ -33,6 +33,16 @@ public class GameService implements IGameService {
         this.gameRepository = gameRepository;
     }
 
+    public GameService(IGameRepository gameRepository, ITeamValidator teamValidator, IGameValidator gameValidator) {
+        this.gameRepository = gameRepository;
+        this.teamValidator = teamValidator;
+        this.gameValidator = gameValidator;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long createGame(ITeam homeTeam, ITeam awayTeam, String description, String gameType) {
         validateInputParameters(homeTeam, awayTeam, gameType);
@@ -50,11 +60,17 @@ public class GameService implements IGameService {
         return gameRepository.saveOrUpdateGame(newGame);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long updateGame(long gameId, Integer homeTeamScore, Integer awayTeamScore) {
         return updateGame(gameId, homeTeamScore, awayTeamScore, ZonedDateTime.now());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long updateGame(long gameId, Integer homeTeamScore, Integer awayTeamScore, ZonedDateTime updateTime) {
         Optional<IGame> game = gameRepository.getGameById(gameId);
@@ -72,6 +88,9 @@ public class GameService implements IGameService {
                 .orElseThrow(() -> new IncorrectGameParameterException(format("Game with id %d not found", gameId)));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long finishGame(long gameId) {
         Optional<IGame> game = gameRepository.getGameById(gameId);
@@ -83,6 +102,9 @@ public class GameService implements IGameService {
                 .orElseThrow(() -> new IncorrectGameParameterException(format("Game with id %d not found", gameId)));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<IGame> getGamesInProgressSummary() {
         List<IGame> gamesInProgress = gameRepository.getAllStartedGames();
@@ -101,7 +123,6 @@ public class GameService implements IGameService {
 
         return gamesSorted;
     }
-
 
     public ITeamValidator getTeamValidator() {
         return teamValidator;
